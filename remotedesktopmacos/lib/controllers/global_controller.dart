@@ -57,7 +57,8 @@ class GlobalController extends ChangeNotifier {
       String? ipAddress = await _networkInfo.getWifiIP();
 
       // 方法2：如果方法1失败，遍历系统网络接口获取局域网 IP
-      if (ipAddress.isEmpty ||
+      if (ipAddress == null ||
+          ipAddress.isEmpty ||
           ipAddress == '0.0.0.0' ||
           ipAddress == '127.0.0.1') {
         ipAddress = await _getLocalNetworkIP();

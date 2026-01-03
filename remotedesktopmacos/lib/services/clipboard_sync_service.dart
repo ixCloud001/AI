@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
-import 'package:rich_clipboard/rich_clipboard.dart';
 
 /// 剪贴板数据类型
 enum ClipboardDataType {
@@ -96,10 +95,8 @@ class ClipboardSyncService {
       // 普通文本数据
       _isRemoteUpdate = true;
       
-      // 写入本地剪贴板
-      await RichClipboard.setData(
-        RichClipboardData(text: text),
-      );
+      // 写入本地剪贴板（使用 Flutter 原生 API）
+      await Clipboard.setData(ClipboardData(text: text));
       
       if (kDebugMode) {
         print('已写入剪贴板文本');
@@ -205,9 +202,9 @@ class ClipboardSyncService {
       }
 
       try {
-        // 检查文本变化
-        final clipboardData = await RichClipboard.getData();
-        if (clipboardData.text != null && clipboardData.text!.isNotEmpty) {
+        // 检查文本变化（使用 Flutter 原生 API）
+        final clipboardData = await Clipboard.getData(Clipboard.kTextPlain);
+        if (clipboardData?.text != null && clipboardData!.text!.isNotEmpty) {
           await sendText(clipboardData.text!);
         }
 
